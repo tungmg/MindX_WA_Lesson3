@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #container {
+            height: 300px;
+            width: 50%;
+            border-radius: 10px;
+            color: white;
+        }
+
+        .background-color {
+            background-color: #00ced1;
+        }
+
+        .d-flex {
+            display: flex;
+        }
+
+        .flex-direction {
+            flex-direction: column;
+        }
+
+        .flex-grow-2 {
+            flex-grow: 2;
+        }
+
+        .flex-grow-3 {
+            flex-grow: 3;
+        }
+
+        .justify-content {
+            justify-content: space-around;
+        }
+
+        .algin-items {
+            align-items: center;
+        }
+
+        input[type="button"] {
+            height: 60px;
+            width: 240px;
+            background-color: indianred;
+            opacity: 1;
+            transition: 0.3;
+            border-radius: 10px;
+        }
+
+        input[type="button"]:hover {
+            opacity: 0.9;
+        }
+
+        .border {
+            border: 1px solid black;
+        }
+
+        .border-radius-10 {
+            border-radius: 10px;
+        }
+
+        .mt-50 {
+            margin-top: 50px
+        }
+
+        #question {
+            font-size: 25px;
+            text-align: center;
+        }
+
+        #nextBtn {
+            margin-top: 10px;
+            border-radius: 3px;
+            width: 60px;
+            height: 40px;
+            float: right;
+            background-color: #4CAF50;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="container" class="d-flex flex-direction">
+        <div class="flex-grow-2 d-flex algin-items flex-direction">
+            <p id="score" style="color: black;">SCORE: 0</p>
+            <img style="width: 100px; " src="avatar.jpg" alt="">
+        </div>
+        <div class="flex-grow-2 background-color border-radius-10">
+            <p id="question"></p>
+        </div>
+        <div id="answer" class="flex-grow-3 d-flex justify-content">
+            <div class="d-flex flex-direction justify-content">
+                <div><input type="button" name="A" id="0" onclick="checkAnswer(this.value)"></div>
+                <div><input type="button" name="B" id="1" onclick="checkAnswer(this.value)"></div>
+            </div>
+            <div class="d-flex flex-direction justify-content">
+                <div><input type="button" name="C" id="2" onclick="checkAnswer(this.value)"></div>
+                <div><input type="button" name="D" id="3" onclick="checkAnswer(this.value)"></div>
+            </div>
+        </div>
+        <div id="50/50" class="d-flex flex-grow-2 justify-content">
+            <input style="background-color:chartreuse;" type="button" name="50/50" id="50/50" value="50/50" onclick="remove()">
+        </div>
+        <div class="flex-grow-2 d-flex justify-content">
+            <p id="result" style="color: black;"></p>
+        </div>
+    </div>
+    <script>
+        let questionsList = [
+            "2 x 2 = ?",
+            "What is the capital of Viet Nam?"
+        ];
+        let answersList = [
+            { "A": 4, "B": 5, "C": 6, "D": 7 },
+            { "A": "Ho Chi Minh", "B": "Da Nang", "C": "Ha Noi", "D": "Can Tho" }
+        ];
+        let correctAnswer = [
+            4, "Ha Noi"
+        ];
+        let question = document.getElementById("question");
+        let a = document.getElementById("0");
+        let b = document.getElementById("1");
+        let c = document.getElementById("2");
+        let d = document.getElementById("3");
+        
+        let result = document.getElementById("result");
+        let scoreField = document.getElementById("score");
+        let count = 0;
+        let score = 0;
+
+        function nextQuestion() {
+            count++;
+            if (count >= questionsList.length)
+                fillQuestion(questionsList.length - 1);
+            else
+                fillQuestion(count);
+        }
+
+        function fillQuestion(number) {
+            question.innerHTML = "Question " + (number + 1) + ": " + questionsList[number];
+            a.value = answersList[number].A;
+            b.value = answersList[number].B;
+            c.value = answersList[number].C;
+            d.value = answersList[number].D;
+        }
+
+        function checkAnswer(answer) {
+            console.log(answer);
+            let kt = 0;
+            let questionNumber = question.innerText[9];
+            if (answer != correctAnswer[questionNumber - 1]) {
+                kt = 1;
+            }
+            if(kt == 0){
+                score++;
+                nextQuestion(questionNumber);
+                scoreField.innerHTML = "SCORE: " + score;
+            }
+            else{
+                result.innerHTML = "WRONG ANSWER, YOU LOST";
+            }
+        }
+        let count5050 = 0;
+        function remove() {
+            let questionNumber = question.innerText[9];
+            let correct = correctAnswer[questionNumber - 1];
+            
+            if(count5050 == 0){
+                let n = Math.floor((Math.random()*4)+ 0);
+                let m = Math.floor((Math.random()*4)+ 0);
+                
+                while(m == n || document.getElementById(n).value == correct || document.getElementById(m).value == correct){
+                    n = Math.floor((Math.random()*4)+ 0);
+                    m = Math.floor((Math.random()*4)+ 0);
+                }
+
+                document.getElementById(n).value = "";
+                document.getElementById(m).value = "";
+            }
+            count5050 ++;
+        }
+
+        (function () {
+            fillQuestion(count);
+        })();
+    </script>
+</body>
+
+
+</html>
